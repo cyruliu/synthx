@@ -10,7 +10,7 @@ A prototype started from [Weekend AI Agent Hack](https://lu.ma/fjs446ye?tk=WePHy
 
 ## Setting Up
 
-Create a `credentials.py` file with the following credential configurations:
+Create a `.env` file with the following credential configurations:
 
 - X account keys: it can be generated from https://developer.x.com/.
 ``` 
@@ -35,3 +35,6 @@ pip install -r requirements.txt
 ```
 
 ## Extension 
+
+TODOs:
+- Analysis for target content.
