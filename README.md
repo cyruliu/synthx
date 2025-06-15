@@ -6,7 +6,7 @@ A prototype started from [Weekend AI Agent Hack](https://lu.ma/fjs446ye?tk=WePHy
 ## Features
 - Configurable for different X account.
 - Live chat on X.
-- Stock analysis.
+- Stock analysis (TODO).
 
 ## Setting Up
 
