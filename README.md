@@ -1,4 +1,7 @@
 # SynthX: An AI agent for X Chatbot
+
+![Overview](img/synthx-overview.jpeg)
+
 ## Background
 
 A prototype started from [Weekend AI Agent Hack](https://lu.ma/fjs446ye?tk=WePHyw) (06/14/2025), by General Machine Intelligent (GMI) Cloud.
@@ -6,6 +9,7 @@ A prototype started from [Weekend AI Agent Hack](https://lu.ma/fjs446ye?tk=WePHy
 ## Features
 - Configurable for different X account.
 - Live chat on X.
+- Streaming target tweets and mentioning.
 - Stock analysis (TODO).
 
 ## Setting Up
@@ -38,3 +42,4 @@ pip install -r requirements.txt
 
 TODOs:
 - Analysis for target content.
+- Sentiments
