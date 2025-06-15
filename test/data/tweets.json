@@ -1,0 +1,54 @@
+[
+    {
+        "data": {
+            "id": "1",
+            "text": "Hello @giftedsynth, this is a test tweet!"
+        },
+        "includes": {
+            "users": [
+                {
+                    "username": "testuser1"
+                }
+            ]
+        }
+    },
+    {
+        "data": {
+            "id": "2",
+            "text": "@giftedsynth, how are you today?"
+        },
+        "includes": {
+            "users": [
+                {
+                    "username": "testuser2"
+                }
+            ]
+        }
+    },
+    {
+        "data": {
+            "id": "3",
+            "text": "@giftedsynth, who is the powerful man on earth?"
+        },
+        "includes": {
+            "users": [
+                {
+                    "username": "testuser3"
+                }
+            ]
+        }
+    },
+    {
+        "data": {
+            "id": "4",
+            "text": "@giftedsynth, what should I do on the weekend in San Francisco?"
+        },
+        "includes": {
+            "users": [
+                {
+                    "username": "testuser4"
+                }
+            ]
+        }
+    }
+]

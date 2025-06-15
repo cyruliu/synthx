@@ -36,3 +36,4 @@ class Agent:
             chat_history=self.history,
         ).response
         self.history.append(ChatMessage(role="user", content=prompt))
+        return self.answer

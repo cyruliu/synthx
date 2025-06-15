@@ -23,7 +23,12 @@ class Main:
     """A wrapper for the main application logic and retry loop."""
 
     def __init__(self):
-        self.twitter = Twitter()
+        try:
+                # self.twitter = Twitter()
+            self.twitter = Twitter.for_local_streaming()
+        except Exception as e:
+            logging.error(f"Failed to initialize Twitter API: {e}")
+            raise
 
     def twitter_callback(self, tweet):
         """Analyzes posts and tweets about it."""
@@ -36,7 +41,10 @@ class Main:
 
         logging.info('Starting new streaming session.')
         try:
-            self.twitter.stream_mentions()
+            # self.twitter.stream_mentions()
+            self.twitter.stream_mentions_local()
+            logging.info('Streaming session started successfully, now stop the session.')
+            self.twitter.strop_stream()
         except Exception as e:
             logging.error(f"Error in streaming session: {e}")
             self.twitter.strop_stream()
@@ -55,7 +63,7 @@ class Main:
         """Runs the main retry loop with exponential backoff."""
 
         tries = 0
-        while True:
+        while tries < 1:
             try:
                 # The session blocks until an error occurs.
                 self.run_session()
@@ -90,5 +98,8 @@ class Main:
 if __name__ == '__main__':
     try:
         Main().run()
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
+        logging.exception("Exception details:")
     finally:
         logging.info("Application has stopped.")

@@ -1,4 +1,5 @@
 import requests
+import json
 from agent import Agent
 from json import loads
 from threading import Event, Thread
@@ -17,7 +18,6 @@ API_KEY_SECRET = environ["API_KEY_SECRET"]
 BEARER_TOKEN = environ["BEARER_TOKEN"]
 ACCESS_TOKEN = environ["ACCESS_TOKEN"]
 ACCESS_TOKEN_SECRET = environ["ACCESS_TOKEN_SECRET"]
-
 
 # The user ID of @elonmusk.
 MUSK_USER_ID = "44196397"
@@ -56,16 +56,55 @@ class Twitter:
     """A helper for talking to Twitter APIs."""
 
     def __init__(self):
-        self.twitter_auth = OAuthHandler(API_KEY, API_KEY_SECRET)
-        self.twitter_auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-        self.twitter_api = API(auth=self.twitter_auth, wait_on_rate_limit=True)
-        self.streaming_active = False
+        try:
+            # Initialize OAuth credentials.
+            self.twitter_auth = OAuthHandler(API_KEY, API_KEY_SECRET)
+            self.twitter_auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+            #Initialize the Twitter API object
+            self.twitter_api = API(auth=self.twitter_auth, wait_on_rate_limit=True)
+            # Verify credentials to ensure the API is set up correctly.
+            user = self.twitter_api.verify_credentials()
+            if user:
+                print(f"Authenticated as {user.screen_name}")
+            else:
+                raise Exception("Failed to authenticate with Twitter API.")
+        
+            self.streaming_active = False
+        except Exception as e:
+            print(f"Error initializing Twitter API: {e}")
+            raise
+        
+    @classmethod
+    def for_local_streaming(cls):
+        """Creates an instance of Twitter for local streaming."""
+        instance = cls.__new__(cls)  
+        instance.streaming_active = False  
+        print("Initialized Twitter instance for local streaming.")
+        return instance
+         
+    def stream_mentions_local(self, file_path="test/data/tweets.json"):
+        """Simulates streaming mentions by reading from a local file."""
+        self.streaming_active = True
+        try:
+            with open(file_path, "r") as f:
+                tweets = json.load(f)
+                for tweet in tweets:
+                    if not self.streaming_active:
+                        break
+                    self.handle_mention(tweet)
+                    print("Mention received:", tweet)
+        except Exception as e:
+            print(f"Error reading local tweets: {e}")
+        finally:
+            self.streaming_active = False
+            print("Stopped local tweet simulation.")
 
     def stream_mentions(self):
         """Streams mentions of the authenticated user."""
         
         self.streaming_active = True
-        url = "https://api.twitter.com/2/tweets/search/stream"
+        url = "https://api.twitter.com/2/tweets/search/recent"
+        # url = "https://api.twitter.com/2/tweets/search/stream"
         headers = {"Authorization": f"Bearer {BEARER_TOKEN}"}
         # Add rules to filter mentions
         rules_url = f"{url}/rules"
@@ -94,11 +133,12 @@ class Twitter:
             print(f"Mention received from @{username}: {tweet['data']['text']}")
 
             # Respond to the mention with an llvm agent
-            agent_response = Agent().chat(request_txt).answer
+            agent_response = Agent().chat(request_txt)
             if not agent_response:
                 reply_text = f"Thanks for the mention, @{username}, however I have no further comments!" 
-            reply_text = agent_response
-            self.reply_to_tweet(tweet_id, reply_text)
+            reply_text = agent_response    
+            # self.reply_to_tweet(tweet_id, reply_text)
+            print(tweet_id, reply_text)
         except KeyError as e:
             print(f"Malformed tweet: {tweet}, error: {e}")
     
@@ -143,3 +183,11 @@ class Twitter:
 
         self.logs.warn("Unknown sentiment: %s" % sentiment)
         return EMOJI_SHRUG
+    
+    
+# url = "https://api.twitter.com/2/tweets/search/recent"
+# headers = {"Authorization": f"Bearer {BEARER_TOKEN}"}
+# params = {"query": "@giftedsynth", "max_results": 10}
+
+# response = requests.get(url, headers=headers, params=params)
+# print(response.json())
