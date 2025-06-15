@@ -1,0 +1,25 @@
+# Streaming dependencies
+backoff==1.10.0
+google-cloud-error-reporting==1.1.0
+google-cloud-language==2.0.0
+google-cloud-logging==2.0.2
+holidays==0.10.5.2
+# lxml==5.4.0
+oauth2==1.9.0.post1
+polygon-api-client==0.1.9
+pytest==6.2.2
+pytz==2021.1
+requests>=2.32.1
+tqdm>=4.66.1
+tweepy==3.10.0
+
+# LLM dependencies
+torch
+llama-index==0.11.6
+llama-index-llms-openai
+llama-index-readers-file
+llama-index-embeddings-openai
+llama-index-llms-openai-like
+openinference-instrumentation-llama-index>=2
+arize-phoenix
+python-dotenv
